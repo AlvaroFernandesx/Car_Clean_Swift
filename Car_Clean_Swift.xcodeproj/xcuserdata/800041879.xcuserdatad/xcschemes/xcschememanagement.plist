@@ -7,7 +7,20 @@
 		<key>Car_Clean_Swift.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>7</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>550AF03A23A26D7C0015A05F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>550AF04E23A26D7F0015A05F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
