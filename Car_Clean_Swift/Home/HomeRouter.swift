@@ -13,6 +13,7 @@
 import UIKit
 
 @objc protocol HomeRoutingLogic {
+    func showError(_ title: String, _ message: String)
 }
 
 protocol HomeDataPassing {
@@ -24,30 +25,16 @@ class HomeRouter: HomeRoutingLogic, HomeDataPassing {
     weak var viewController: HomeViewController?
     var dataStore: HomeDataStore?
 
-    //func routeToSomewhere(segue: UIStoryboardSegue?) {
-    //  if let segue = segue {
-    //      let destinationVC = segue.destination as! SomewhereViewController
-    //      var destinationDS = destinationVC.router!.dataStore!
-    //      passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-    //  } else {
-    //      let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    //      let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-    //      var destinationDS = destinationVC.router!.dataStore!
-    //      passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-    //      navigateToSomewhere(source: viewController!, destination: destinationVC)
-    //  }
-    //}
-
-    // MARK: Navigation
-
-    //func navigateToSomewhere(source: HomeViewController, destination: SomewhereViewController) {
-    //  source.show(destination, sender: nil)
-    //}
-
-    // MARK: Passing data
-
-    //func passDataToSomewhere(source: HomeDataStore, destination: inout SomewhereDataStore) {
-    //  destination.name = source.name
-    //}
-
+    func showError(_ title: String, _ message: String) {
+        showAlert(title, message)
+    }
+    
+    private func showAlert(_ title: String, _ message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default) { (action) in
+        }
+        alert.addAction(action)
+        viewController?.present(alert, animated: true, completion: nil)
+    }
+    
 }

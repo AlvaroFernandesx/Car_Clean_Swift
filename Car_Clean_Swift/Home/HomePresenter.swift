@@ -15,10 +15,22 @@
 import UIKit
 
 protocol HomePresentationLogic {
+    func reloadCollection()
+    func presentRequestFailureAlert()
 }
 
 class HomePresenter: HomePresentationLogic {
     
     weak var viewController: HomeDisplayLogic?
+    
+    func reloadCollection() {
+        viewController?.reloadCollection()
+    }
+    
+    func presentRequestFailureAlert() {
+        let title  = "We had a connection problem"
+        let message  = "Check your internet connection"
+        viewController?.presentRequestFailureAlert(title, message)
+    }
 
 }

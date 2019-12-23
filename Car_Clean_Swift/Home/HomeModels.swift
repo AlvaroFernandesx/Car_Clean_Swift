@@ -13,12 +13,46 @@
 import UIKit
 
 enum Home {
-
-    struct Request {
+    
+    enum Car: String, CaseIterable {
+        case esportivos, luxo, classicos
     }
-    struct Response {
-    }
-    struct ViewModel {
+    
+    enum CarModels {
+        
+        struct Response: Codable {
+            var carros: Carros?
+        }
+        
+        class Carros: Codable{
+            var carro: [Carro]?
+            
+            init(carro: [Carro]?) {
+                self.carro = carro
+            }
+        }
+        
+        class Carro: Codable//, Equatable
+        {
+            //        static func == (lhs: TableCarModels.Carro, rhs: TableCarModels.Carro) -> Bool {
+            //            ==
+            //        }
+            
+            var nome: String
+            var desc: String
+            var url_info: String?
+            var url_foto: String?
+            var url_video: String?
+            var latitude: String?
+            var longitude: String?
+            
+            init(nome: String, desc: String) {
+                self.nome = nome
+                self.desc = desc
+            }
+        }
     }
 
 }
+
+

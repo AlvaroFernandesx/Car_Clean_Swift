@@ -11,8 +11,11 @@
 //
 
 import UIKit
+import SDWebImage
 
 protocol HomeDisplayLogic: class {
+    func reloadCollection()
+    func presentRequestFailureAlert(_ title: String, _ message: String)
 }
 
 class HomeViewController: UIViewController {
@@ -20,6 +23,14 @@ class HomeViewController: UIViewController {
     var interactor: HomeBusinessLogic?
     var router: (HomeRoutingLogic & HomeDataPassing)?
 
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+    @IBOutlet weak var segment: UISegmentedControl!
+    
+    @IBAction func segmentAction(_ sender: Any) {
+        getCars()
+    }
+    
     init() {
         super.init(nibName: "HomeViewController", bundle: Bundle(for: HomeViewController.self))
         setup()
@@ -48,8 +59,47 @@ class HomeViewController: UIViewController {
         router.dataStore = interactor
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureCollection()
+        getCars()
+    }
+    
+    func getCars() {
+        let typeCar = interactor?.getTypeCar(segment.selectedSegmentIndex) ?? Home.Car.luxo
+        interactor?.load(car: typeCar)
+    }
+    
+    func configureCollection() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(UINib(nibName: "CarCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "carCell")
+    }
+
 }
 
 extension HomeViewController: HomeDisplayLogic {
+    
+    func presentRequestFailureAlert(_ title: String, _ message: String) {
+        router?.showError(title, message)
+    }
+    
+    func reloadCollection() {
+        collectionView.reloadData()
+    }
+    
+}
 
+extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return interactor?.numberOfRows ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "carCell", for: indexPath) as? CarCollectionViewCell
+        cell?.configure(interactor?.cellForRow(at: indexPath.row))
+        return cell ?? UICollectionViewCell()
+    }
+    
 }

@@ -7,3 +7,27 @@
 //
 
 import Foundation
+
+class HomeProvider: RequestProvider {
+    var queryParameters: [URLQueryItem]?
+    
+
+    var car: Home.Car
+    
+    var path: String {
+        return "/carros/carros_\(car.rawValue).json"
+    }
+    
+    var httpVerb: HTTPMethod {
+        return .get
+    }
+    
+    var bodyParameters: Encodable? {
+        return ["carros_": car.rawValue]
+    }
+    
+    init(car: Home.Car) {
+        self.car = car
+    }
+    
+}

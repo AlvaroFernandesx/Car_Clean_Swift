@@ -17,10 +17,15 @@ import PromiseKit
 
 class HomeWorker {
 
-    var serviceProvider: ServiceProvider
-
-    init(serviceProvider: ServiceProvider = ServiceProvider.shared) {
-        self.serviceProvider = serviceProvider
+    let networkProvider: NetworkProvider
+    
+    init(networkProvider: NetworkProvider = NetworkProvider()) {
+        self.networkProvider = networkProvider
     }
-  
+    
+    func getCarList(car: Home.Car) -> Promise<Home.CarModels.Response> {
+        let requestProvider = HomeProvider(car: car)
+        return networkProvider.execute(request: requestProvider, parser: Home.CarModels.Response.self)
+    }
+    
 }

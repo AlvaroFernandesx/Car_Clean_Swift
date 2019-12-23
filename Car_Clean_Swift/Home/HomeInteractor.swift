@@ -15,6 +15,11 @@
 import UIKit
 
 protocol HomeBusinessLogic {
+    func load(car: Home.Car)
+    func cellForRow(at index: Int) -> Home.CarModels.Carro?
+    func getTypeCar(_ number: Int) -> Home.Car
+    
+    var numberOfRows: Int { get }
 }
 
 protocol HomeDataStore {
@@ -23,10 +28,45 @@ protocol HomeDataStore {
 class HomeInteractor: HomeBusinessLogic, HomeDataStore {
 
     var presenter: HomePresentationLogic?
-    let worker: HomeWorker
+    var worker: HomeWorker
+    var response: Home.CarModels.Response?
 
     init(worker: HomeWorker = HomeWorker()) {
         self.worker = worker
+    }
+    
+    func getTypeCar(_ number: Int) -> Home.Car {
+        switch number {
+        case 0:
+            return Home.Car.luxo
+        case 1:
+            return Home.Car.classicos
+        case 2:
+            return Home.Car.esportivos
+        default:
+            return Home.Car.luxo
+        }
+    }
+    
+    func load(car: Home.Car) {
+        worker.getCarList(car: car).done(handleSuccess).catch(handleFailure)
+    }
+    
+    func handleSuccess(_ response: Home.CarModels.Response) {
+        self.response = response
+        presenter?.reloadCollection()
+    }
+    
+    func handleFailure(_ error: Error) {
+        presenter?.presentRequestFailureAlert()
+    }
+    
+    var numberOfRows: Int {
+        return response?.carros?.carro?.count ?? 0
+    }
+    
+    func cellForRow(at index: Int) -> Home.CarModels.Carro? {
+        return response?.carros?.carro?[index]
     }
 
 }

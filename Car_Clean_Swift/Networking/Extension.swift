@@ -20,3 +20,10 @@ extension Bundle {
     
 }
 
+extension Encodable {
+    
+    func toJSONData() -> Data? {
+        return try? JSONEncoder().encode(self)
+    }
+    
+}
